@@ -46,6 +46,8 @@ Just run the `main` method in the `Main` class with your desired username passed
 3. Use the Left Arrow Key to shift focus to the Send button.
 
 4. Press Enter to send the message.
+
+5. Write 'exit' to leave the chatroom.
 ```
 
 ## 📸 Screenshots
