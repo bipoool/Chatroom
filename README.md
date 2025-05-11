@@ -30,7 +30,7 @@ java -jar target/chatroom.jar <username1>
 java -jar target/chatroom.jar <username2>
 ```
 
-### Using IntelliJ (or any IDE)
+### Using IntelliJ (Not in windows)
 
 ```text
 Just run the `main` method in the `Main` class with your desired username passed as an argument.

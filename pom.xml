@@ -50,6 +50,9 @@
           <execution>
             <phase>package</phase>
             <goals><goal>shade</goal></goals>
+            <configuration>
+              <finalName>chatroom</finalName>
+            </configuration>
           </execution>
         </executions>
       </plugin>
