@@ -11,20 +11,24 @@ class DiceDbChatBackend {
   BlockingQueue<Response> messageQueue;
   DiceDbManager diceDbManager;
   String username;
+  String topic;
 
-  DiceDbChatBackend(String username) throws DiceDbException, InterruptedException {
+  DiceDbChatBackend(String username, String topic) throws DiceDbException, InterruptedException {
     this.diceDbManager = new DiceDbManager("localhost", 7379, 2, 2);
     this.username = username;
+    this.topic = topic;
   }
 
   public BlockingQueue<Response> register() throws DiceDbException, InterruptedException {
-    messageQueue = diceDbManager.watch("GET.WATCH", List.of("last_message"));
+    String key = "last_message_" + topic;
+    messageQueue = diceDbManager.watch("GET.WATCH", List.of(key));
     messageQueue.take(); // consume the first message
     return this.messageQueue;
   }
 
-  public void broadcast(String message) throws DiceDbException {
-    this.diceDbManager.fire("SET", List.of("last_message", message));
+  public void broadcast(String message, String topic) throws DiceDbException {
+    String key = "last_message_" + topic;
+    this.diceDbManager.fire("SET", List.of(key, message));
   }
 
   public void close() {
