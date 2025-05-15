@@ -35,22 +35,25 @@ public class ChatRoom {
   Screen screen;
   MultiWindowTextGUI gui;
   BasicWindow window;
+  String topic;
 
-  ChatRoom(String username, DiceDbChatBackend diceDbChatBackend)
+  ChatRoom(String username, String topic, DiceDbChatBackend diceDbChatBackend)
       throws IOException, DiceDbException, InterruptedException {
     this.username = username;
     this.diceDbChatBackend = diceDbChatBackend;
     this.messageQueue = this.diceDbChatBackend.register();
     this.executorService = Executors.newFixedThreadPool(2);
+    this.topic = topic;
     this.initUi();
     this.receiveMessage();
     this.sendFirstMessage();
     this.gui.addWindowAndWait(this.window);
+
   }
 
   public void sendMessage(String message) {
     try {
-      diceDbChatBackend.broadcast(message);
+      diceDbChatBackend.broadcast(message,topic);
     } catch (DiceDbException e) {
       System.err.println("Error sending message: " + e.getMessage());
     }
@@ -76,8 +79,8 @@ public class ChatRoom {
 
   public void sendFirstMessage() {
     try {
-      String message = username + ": Joined the chat room!";
-      diceDbChatBackend.broadcast(message);
+      String message = username + ": Joined the chat room of " + topic + " Discussion!";
+      diceDbChatBackend.broadcast(message,topic);
     } catch (DiceDbException e) {
       System.err.println("Error sending message: " + e.getMessage());
     }
@@ -88,7 +91,7 @@ public class ChatRoom {
         .createScreen();
     this.screen.startScreen();
     this.gui = new MultiWindowTextGUI(this.screen);
-    this.window = new BasicWindow("DiceDB Chat Room");
+    this.window = new BasicWindow("DiceDB Chat Room For " + topic + " Discussion");
     this.window.setHints(Set.of(Window.Hint.CENTERED,
         Window.Hint.NO_POST_RENDERING,
         Window.Hint.EXPANDED));
